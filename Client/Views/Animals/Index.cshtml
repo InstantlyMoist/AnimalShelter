@@ -1,0 +1,105 @@
+﻿@using Shared.Models
+@using Shared.Enums
+@model AnimalIndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<form method="get">
+    <div>
+        <div class="form-group">
+            @Html.DropDownListFor(n => n.animalType, Model.animalTypes, "All")
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(n => n.gender, Model.genders, "All")
+        </div>
+        <div class="form-group">
+            @Html.DropDownListFor(n => n.canBeWithKids, Model.canBeWithKidsList, "All")
+        </div>
+    </div>
+    <input type="submit" value="Go" />
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].AnimalType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].Breed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].Gender)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].EntryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].HelpedTheirPrivateParts)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.animalList[0].CanBeWithKids)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.animalList)
+        {
+            <tr>
+                <td>
+                    <img src="@item.Image" width="100" height="100">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AnimalType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Breed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EntryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HelpedTheirPrivateParts)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CanBeWithKids)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
