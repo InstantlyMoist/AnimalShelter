@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\Gender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Animal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\AppUser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Interest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Remark.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RegisterViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ResponseModel.cs" />

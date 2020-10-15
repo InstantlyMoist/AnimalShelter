@@ -15,7 +15,5 @@ namespace Client.Data
         {
 
         }
-
-        public DbSet<Shared.Models.Animal> Animal { get; set; }
     }
 }

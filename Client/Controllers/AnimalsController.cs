@@ -22,23 +22,50 @@ namespace Client.Controllers
         {
             AnimalIndexModel model = new AnimalIndexModel();
             string baseUrl = "https://localhost:44353/api/animals?";
-            if (animalType != null) baseUrl += "animalType=" + animalType.ToString() + "&";
-            if (gender != null) baseUrl += "gender=" + gender.ToString() + "&";
-            if (canBeWithKids != null) baseUrl += "canBeWithKids=" + canBeWithKids.ToString();
+            if (animalType != null)
+            {
+                baseUrl += "animalType=" + animalType.ToString() + "&";
+                model.animalType = animalType.ToString();
+            }
+            if (gender != null)
+            {
+                baseUrl += "gender=" + gender.ToString() + "&";
+                model.gender = gender.ToString();
+            }
+            if (canBeWithKids != null)
+            {
+                baseUrl += "canBeWithKids=" + canBeWithKids.ToString();
+                model.canBeWithKids = canBeWithKids.ToString();
+            }
             var response = await baseUrl.GetStringAsync();
             model.animalList = JsonConvert.DeserializeObject<List<Animal>>(response);
-            if (animalType != null) model.animalType = animalType.ToString();
-            if (gender != null) model.gender = gender.ToString();
-            if (canBeWithKids != null) model.canBeWithKids = canBeWithKids.ToString();
             model.animalTypes = new SelectList(Enum.GetValues(typeof(AnimalType)).Cast<AnimalType>().ToList(), animalType.ToString());
             model.genders = new SelectList(Enum.GetValues(typeof(Gender)).Cast<Gender>().ToList(), gender.ToString());
             model.canBeWithKidsList = new SelectList(Enum.GetValues(typeof(DeepBoolean)).Cast<DeepBoolean>().ToList(), canBeWithKids.ToString());
             return View(model);
         }
 
+        [Authorize]
+        [HttpGet("showinterest/{id}")]
+        public async Task<IActionResult> ShowInterest(int id)
+        {
+            
+            // /animals/showinterest/5
+            Interest interest = new Interest();
+            interest.Email = User.Identity.Name;
+
+            string response = await ("https://localhost:44353/api/animals/showinterest/" + id).PostJsonAsync(interest).ReceiveString();
+            if (response == null) return NotFound();
+            ResponseModel model = JsonConvert.DeserializeObject<ResponseModel>(response);
+            if (model.Message.Equals("MAX_COUNT")) return View("InterestFailed");
+            else if (model.Message.Equals("ALREADY_INTERESTED")) return View("AlreadyInterested");
+            return View("InterestShown");
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
+            ViewBag.Id = id;
             string response = await ("https://localhost:44353/api/animals/" + id).GetStringAsync();
             if (response == null || response == String.Empty)
             {
@@ -47,14 +74,15 @@ namespace Client.Controllers
             Animal animal = JsonConvert.DeserializeObject<Animal>(response);
             return View(animal);
         }
-
         [Authorize]
+
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(Animal Animal, IFormFile File)
         {
@@ -68,8 +96,6 @@ namespace Client.Controllers
             var response = await "https://localhost:44353/api/animals".PostJsonAsync(Animal).ReceiveString();
             ResponseModel Model = JsonConvert.DeserializeObject<ResponseModel>(response);
             return RedirectToAction("Details", Model);
-            //Response.Redirect(Model.Location);
-            //todo: return to newly given location
         }
 
         

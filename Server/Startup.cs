@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Server.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Shared.Models;
 
 namespace NewServer
 {

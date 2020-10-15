@@ -34,16 +34,38 @@ namespace Server.Controllers
             return FoundAnimals;
         }
 
+        [HttpPost("showinterest/{id}")]
+        public async Task<ActionResult<ResponseModel>> ShowInterest(int id, Interest interest)
+        {
+            ResponseModel model = new ResponseModel();
+            var animal = await _context.Animal.FindAsync(id);
+            var alreadyShownInterests = await _context.Interest.Where(b => b.Email == interest.Email).ToListAsync();
+            var alreadyShownInterestInThisAnimal = _context.Interest.Where(b => b.Email == interest.Email && b.Id == id).First();
+            if (alreadyShownInterestInThisAnimal != null)
+            {
+                model.Message = "ALREADY_INTERESTED";
+                return model;
+            }
+            if (animal == null) return null;
+            if (alreadyShownInterests.Count > 3)
+            {
+                model.Message = "MAX_COUNT";
+                return model;
+            }
+            model.Message = "OK";
+            interest.Animal = animal;
+            _context.Interest.Add(interest);
+            await _context.SaveChangesAsync();
+            return model;
+        }
+
         // GET: api/Animals/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Animal>> GetAnimal(int id)
         {
             var animal = await _context.Animal.FindAsync(id);
 
-            if (animal == null)
-            {
-                return null;
-            }
+            if (animal == null) return null;
 
             return animal;
         }

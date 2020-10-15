@@ -9,13 +9,11 @@ namespace Server.Context
     {
         public AnimalShelterContext(DbContextOptions<AnimalShelterContext> options) : base(options)
         {
-
+            // hello
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //modelBuilder.Entity<Remark>().HasOne(r => r.Animal).WithMany().HasForeignKey(p => p.AnimalId);
 
             modelBuilder.Entity<Remark>().Property(r => r.EntryDate).HasDefaultValueSql("getutcdate()");
             modelBuilder.Entity<Animal>().Property(a => a.EntryDate).HasDefaultValueSql ("getutcdate()");
@@ -35,5 +33,6 @@ namespace Server.Context
 
         public DbSet<Animal> Animal { get; set; }
         public DbSet<Remark> Remark { get; set; }
+        public DbSet<Interest> Interest { get; set; }
     }
 }

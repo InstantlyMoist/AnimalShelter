@@ -87,7 +87,7 @@ namespace Server.Migrations
                     b.ToTable("Animal");
                 });
 
-            modelBuilder.Entity("Shared.Models.Remark", b =>
+            modelBuilder.Entity("Shared.Models.Interest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,6 +95,26 @@ namespace Server.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.ToTable("Interest");
+                });
+
+            modelBuilder.Entity("Shared.Models.Remark", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AnimalId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -115,11 +135,20 @@ namespace Server.Migrations
                     b.ToTable("Remark");
                 });
 
+            modelBuilder.Entity("Shared.Models.Interest", b =>
+                {
+                    b.HasOne("Shared.Models.Animal", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId");
+                });
+
             modelBuilder.Entity("Shared.Models.Remark", b =>
                 {
                     b.HasOne("Shared.Models.Animal", null)
                         .WithMany("Remarks")
-                        .HasForeignKey("AnimalId");
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
